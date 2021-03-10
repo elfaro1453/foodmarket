@@ -17,6 +17,13 @@ use App\Http\Controllers\API\UserController;
 */
 
 Route::post('login', [UserController::class, 'login']);
+Route::get('unauthorized', function () {
+    // return unauthorized message
+    return ResponseFormatter::error([
+        'message' => 'Unauthorized'
+    ], 'Unauthorized', 401);
+})->name('api.unauthorized');
+
 Route::post('register', [UserController::class, 'register']);
 Route::get('register', function () {
     return ResponseFormatter::error(
@@ -26,10 +33,9 @@ Route::get('register', function () {
     );
 });
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [UserController::class, 'fetch']);
-    Route::post('register', [UserController::class, 'updateProfile']);
+    Route::post('user', [UserController::class, 'updateProfile']);
     Route::post('user/photo', [UserController::class, 'updatePhoto']);
     Route::post('logout', [UserController::class, 'logout']);
-
 });

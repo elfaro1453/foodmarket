@@ -25,49 +25,38 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
+        /**
+         * Get a portion of the request
+         * 
+         * @see https://laravel.com/docs/8.x/requests#retrieving-a-portion-of-the-input-data
+         */
+        $credential = $request->only(['email', 'password']);
 
-        // Handle exception if something wrong outside login
-        try {
-            /**
-             * Get a portion of the request
+        // check if authentication success
+        if (Auth::attempt($credential)) {
+
+            // get the user
+            $user = User::where('email', $request->email)->first();
+
+            /** 
+             * Create Token for User using Laravel Sanctum
              * 
-             * @see https://laravel.com/docs/8.x/requests#retrieving-a-portion-of-the-input-data
-             */
-            $credential = $request->only(['email', 'password']);
+             * @see https://laravel.com/docs/8.x/sanctum#api-token-authentication
+             * */
+            $resultToken = $user->createToken('api_token')->plainTextToken;
 
-            // check if authentication success
-            if (Auth::attempt($credential)) {
-
-                // get the user
-                $user = User::where('email', $request->email)->first();
-
-                /** 
-                 * Create Token for User using Laravel Sanctum
-                 * 
-                 * @see https://laravel.com/docs/8.x/sanctum#api-token-authentication
-                 * */
-                $resultToken = $user->createToken('api_token')->plainTextToken;
-
-                // return response success
-                return ResponseFormatter::success([
-                    'access_token' => $resultToken,
-                    'token_type' => 'Bearer',
-                    'user' => $user
-                ], 'Authenticated');
-            }
-
-            // return unauthorized message if authentication failed
-            return ResponseFormatter::error([
-                'message' => 'Unauthorized'
-            ], 'Authentication Failed', 401);
-        } catch (Exception $error) {
-
-            // return error if something unexpected happened
-            return ResponseFormatter::error([
-                'message' => 'Something went wrong',
-                'error' => $error
-            ], 'Something went wrong', 500);
+            // return response success
+            return ResponseFormatter::success([
+                'access_token' => $resultToken,
+                'token_type' => 'Bearer',
+                'user' => $user
+            ], 'Authenticated');
         }
+
+        // return unauthorized message if authentication failed
+        return ResponseFormatter::error([
+            'message' => 'Unauthorized'
+        ], 'Authentication Failed', 401);
     }
 
     /**
@@ -78,58 +67,44 @@ class UserController extends Controller
      */
     public function register(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'email|max:255|unique:App\Models\User,email|required',
+            'name' => 'string|max:255|required',
+            'password' => $this->passwordRules()
+        ]);
 
-        try {
-            /**
-             * Input Validation should be done in client side
-             * but just in case let's validate input in server side too
-             */
-            $validator = Validator::make($request->all(), [
-                'email' => 'email|max:255|unique:App\Models\User,email|required',
-                'name' => 'string|max:255|required',
-                'password' => $this->passwordRules()
-            ]);
+        // check for the first validation fail, then return error
+        if ($validator->fails()) {
+            // get all the error
+            $errors = $validator->errors()->all();
 
-            // check for the first validation fail, then return error
-            if ($validator->fails()) {
-                // get all the error
-                $errors = $validator->errors()->all();
-
-                // return json with all error
-                return ResponseFormatter::error([
-                    'message' => 'Invalid Input',
-                    'error' => $errors
-                ], 'Invalid input', 418);
-            }
-
-            // if validation success, create user
-            $user = new User;
-            $user->name = $validator->name;
-            $user->email = $validator->email;
-            $user->password = Hash::make($validator->password);
-            $user->address = $validator->address;
-            $user->house_number = $validator->house_number;
-            $user->phone_number = $validator->phone_number;
-            $user->city = $validator->city;
-            $user->save();
-
-            // create token for newly user
-            $resultToken = $user->createToken('api_token')->plainTextToken;
-
-            // return response success
-            return ResponseFormatter::success([
-                'access_token' => $resultToken,
-                'token_type' => 'Bearer',
-                'user' => $user
-            ], 'Authenticated');
-        } catch (Exception $error) {
-
-            // return error if something unexpected happened
+            // return json with all error
             return ResponseFormatter::error([
-                'message' => 'Something went wrong',
-                'error' => $error
-            ], 'Something went wrong', 500);
+                'message' => 'Invalid Input',
+                'error' => $errors
+            ], 'Invalid input', 418);
         }
+
+        // if validation success, create user
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->address = $request->address;
+        $user->house_number = $request->house_number;
+        $user->phone_number = $request->phone_number;
+        $user->city = $request->city;
+        $user->save();
+
+        // create token for newly user
+        $resultToken = $user->createToken('api_token')->plainTextToken;
+
+        // return response success
+        return ResponseFormatter::success([
+            'access_token' => $resultToken,
+            'token_type' => 'Bearer',
+            'user' => $user
+        ], 'Authenticated');
     }
 
     /**
@@ -189,7 +164,7 @@ class UserController extends Controller
     public function updatePhoto(Request $request)
     {
         // validate the request
-        $validator = Validator::make($request->all, [
+        $validator = Validator::make($request->all(), [
             'file' => 'image|max:2048|required'
         ]);
 
@@ -208,7 +183,7 @@ class UserController extends Controller
             );
 
             $user = $request->user();
-            $user->profile_photo_url = $file;
+            $user->profile_photo_path = $file;
             $user->save();
 
             return ResponseFormatter::success([$file], 'Photo profile has been updated.');

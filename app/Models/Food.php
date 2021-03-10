@@ -35,10 +35,11 @@ class Food extends Model
     ];
 
     /**
-     * The accessors to get full URL of picturePath
-     *
-     * @param  $value picturePath column
-     * @return string baseUrl + picturePath
+     * The accessors to get full URL of picture_path
+     * 
+     * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
+     * @param  $value picture_path column
+     * @return string baseUrl + picture_path
      */
     public function getPicturePathAttribute($value)
     {
