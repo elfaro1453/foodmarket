@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
+use App\Http\Controllers\API\FoodController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
 
@@ -39,3 +40,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('user/photo', [UserController::class, 'updatePhoto']);
     Route::post('logout', [UserController::class, 'logout']);
 });
+
+Route::get('food', [FoodController::class, 'all']);

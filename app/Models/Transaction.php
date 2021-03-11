@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Transaction extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -35,9 +36,9 @@ class Transaction extends Model
     /**
      * Get the food associated with the transaction
      * since a transaction has only one food, then we can use one-to-one relationship
-     * 
+     *
      * @see https://laravel.com/docs/8.x/eloquent-relationships#one-to-one
-     * 
+     *
      * return App\Model\Food
      */
     public function food()
@@ -48,14 +49,13 @@ class Transaction extends Model
     /**
      * Get the user associated with the transaction
      * since a transaction has only one user, then we can use one-to-one relationship
-     * 
+     *
      * @see https://laravel.com/docs/8.x/eloquent-relationships#one-to-one
-     * 
+     *
      * return App\Model\User
      */
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-
 }

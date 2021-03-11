@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\ResponseFormatter;
 use App\Models\Food;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -9,9 +10,33 @@ use App\Http\Controllers\Controller;
 class FoodController extends Controller
 {
 
+    /**
+     * Get all foods in paginated json format
+     *
+     * @param Request $request
+     *
+     * @return App\Helpers\ResponseFormatter
+     */
     public function all(Request $request)
     {
         $id = $request->input('id');
+
+        if ($id) {
+            $food = Food::find($id);
+            if ($food) {
+                return ResponseFormatter::success(
+                    $food,
+                    "Data makanan berhasil ditemukan"
+                );
+            } else {
+                return ResponseFormatter::error(
+                    null,
+                    "Data tidak ditemukan",
+                    404
+                );
+            }
+        }
+
         $limit = $request->input('limit', 6);
         $name = $request->input('name');
         $types = $request->input('types');
@@ -22,8 +47,36 @@ class FoodController extends Controller
         $rate_from = $request->input('rate_from');
         $rate_to = $request->input('rate_to');
 
-        if ($id) {
-            $food = Food::find($id);
+        $query = Food::query();
+        if ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
         }
+
+        if ($types) {
+            $query->where('name', 'like', '%' . $types . '%');
+        }
+
+        if ($price_from) {
+            $query->where('name', 'like', '%' . $price_from . '%');
+        }
+
+        if ($price_to) {
+            $query->where('name', 'like', '%' . $price_to . '%');
+        }
+
+        if ($rate_from) {
+            $query->where('name', 'like', '%' . $rate_from . '%');
+        }
+
+        if ($rate_to) {
+            $query->where('name', 'like', '%' . $rate_to . '%');
+        }
+
+        $queryResult = $query->simplePaginate($limit);
+
+        return ResponseFormatter::success(
+            $queryResult,
+            'Data list produk berhasil diambil'
+        );
     }
 }

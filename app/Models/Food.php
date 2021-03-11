@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 class Food extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -36,7 +37,7 @@ class Food extends Model
 
     /**
      * The accessors to get full URL of picture_path
-     * 
+     *
      * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
      * @param  $value picture_path column
      * @return string baseUrl + picture_path
