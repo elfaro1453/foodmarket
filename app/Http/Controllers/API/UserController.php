@@ -43,17 +43,22 @@ class UserController extends Controller
             $resultToken = $user->createToken('api_token')->plainTextToken;
 
             // return response success
-            return ResponseFormatter::success([
+            return ResponseFormatter::success(
+                [
                 'access_token' => $resultToken,
                 'token_type' => 'Bearer',
                 'user' => $user
-            ], 'Authenticated');
+                ],
+                'Authenticated'
+            );
         }
 
         // return unauthorized message if authentication failed
-        return ResponseFormatter::error([
-            'message' => 'Unauthorized'
-        ], 'Authentication Failed', 401);
+        return ResponseFormatter::error(
+            ['message' => 'Unauthorized'],
+            'Authentication Failed',
+            401
+        );
     }
 
     /**
@@ -64,11 +69,14 @@ class UserController extends Controller
      */
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make(
+            $request->all(),
+            [
             'email' => 'email|max:255|unique:App\Models\User,email|required',
             'name' => 'string|max:255|required',
             'password' => $this->passwordRules()
-        ]);
+            ]
+        );
 
         // check for the first validation fail, then return error
         if ($validator->fails()) {
@@ -76,10 +84,14 @@ class UserController extends Controller
             $errors = $validator->errors()->all();
 
             // return json with all error
-            return ResponseFormatter::error([
+            return ResponseFormatter::error(
+                [
                 'message' => 'Invalid Input',
                 'error' => $errors
-            ], 'Invalid input', 418);
+                ],
+                'Invalid input',
+                400
+            );
         }
 
         // if validation success, create user
@@ -97,11 +109,14 @@ class UserController extends Controller
         $resultToken = $user->createToken('api_token')->plainTextToken;
 
         // return response success
-        return ResponseFormatter::success([
+        return ResponseFormatter::success(
+            [
             'access_token' => $resultToken,
             'token_type' => 'Bearer',
             'user' => $user
-        ], 'Authenticated');
+            ],
+            'Authenticated'
+        );
     }
 
     /**
@@ -149,7 +164,7 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        return ResponseFormatter::success($user, 'Profile Updated !');
+        return ResponseFormatter::success($user, 'Profile berhasil diperbarui !');
     }
 
     /**
@@ -161,15 +176,18 @@ class UserController extends Controller
     public function updatePhoto(Request $request)
     {
         // validate the request
-        $validator = Validator::make($request->all(), [
-            'file' => 'image|max:2048|required'
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            ['file' => 'image|max:2048|required']
+        );
 
         // if validation fails, throw error to client
         if ($validator->fails()) {
-            return ResponseFormatter::error([
-                'errors' => $validator->errors()
-            ], 'Fail to update photo', 400);
+            return ResponseFormatter::error(
+                ['errors' => $validator->errors()],
+                'Gagal mengupdate foto',
+                400
+            );
         }
 
         // if validation success
@@ -183,7 +201,7 @@ class UserController extends Controller
             $user->profile_photo_path = $file;
             $user->save();
 
-            return ResponseFormatter::success([$file], 'Photo profile has been updated.');
+            return ResponseFormatter::success([$file], 'Foto profil berhasil diupdate.');
         }
     }
 }

@@ -5,6 +5,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\API\FoodController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
+use App\Models\Transaction;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ Route::get('register', function () {
     return ResponseFormatter::error(
         ['message' => 'Method Get is Forbidden'],
         'Don\'t come again',
-        418
+        400
     );
 });
 
@@ -39,6 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('user', [UserController::class, 'updateProfile']);
     Route::post('user/photo', [UserController::class, 'updatePhoto']);
     Route::post('logout', [UserController::class, 'logout']);
+
+    Route::get('transaction', [Transaction::class, 'all']);
+    Route::post('transaction/{id}', [Transaction::class, 'update']);
 });
 
 Route::get('food', [FoodController::class, 'all']);

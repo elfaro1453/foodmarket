@@ -26,12 +26,12 @@ class FoodController extends Controller
             if ($food) {
                 return ResponseFormatter::success(
                     $food,
-                    "Data makanan berhasil ditemukan"
+                    "Data makanan id $id berhasil ditemukan"
                 );
             } else {
                 return ResponseFormatter::error(
                     null,
-                    "Data tidak ditemukan",
+                    "Data makanan id $id tidak ditemukan",
                     404
                 );
             }
