@@ -17,7 +17,8 @@
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.0",
-        "sentry/sentry-laravel": "^2.4"
+        "sentry/sentry-laravel": "^2.4",
+        "squizlabs/php_codesniffer": "3.5.8"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

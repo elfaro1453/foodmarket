@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
@@ -14,12 +13,11 @@ use App\Actions\Fortify\PasswordValidationRules;
 
 class UserController extends Controller
 {
-
     use PasswordValidationRules;
 
     /**
      * Function used to handle login endpoint
-     * 
+     *
      * @param Illuminate\Http\Request $request
      * @return App\Helpers\ResponseFormatter
      */
@@ -27,20 +25,19 @@ class UserController extends Controller
     {
         /**
          * Get a portion of the request
-         * 
+         *
          * @see https://laravel.com/docs/8.x/requests#retrieving-a-portion-of-the-input-data
          */
         $credential = $request->only(['email', 'password']);
 
         // check if authentication success
         if (Auth::attempt($credential)) {
-
             // get the user
             $user = User::where('email', $request->email)->first();
 
-            /** 
+            /**
              * Create Token for User using Laravel Sanctum
-             * 
+             *
              * @see https://laravel.com/docs/8.x/sanctum#api-token-authentication
              * */
             $resultToken = $user->createToken('api_token')->plainTextToken;
@@ -61,7 +58,7 @@ class UserController extends Controller
 
     /**
      * Function used to handle register endpoint
-     * 
+     *
      * @param Illuminate\Http\Request $request
      * @return App\Helpers\ResponseFormatter
      */
@@ -86,7 +83,7 @@ class UserController extends Controller
         }
 
         // if validation success, create user
-        $user = new User;
+        $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -109,7 +106,7 @@ class UserController extends Controller
 
     /**
      * Function used to handle logout endpoint
-     * 
+     *
      * @param Illuminate\Http\Request $request
      * @return App\Helpers\ResponseFormatter
      */
@@ -124,7 +121,7 @@ class UserController extends Controller
 
     /**
      * Function used to handle fetch current user endpoint
-     * 
+     *
      * @param Illuminate\Http\Request $request
      * @return App\Helpers\ResponseFormatter
      */
@@ -135,15 +132,15 @@ class UserController extends Controller
 
     /**
      * Function used to handle updateprofile endpoint
-     * 
+     *
      * @param Illuminate\Http\Request $request
      * @return App\Helpers\ResponseFormatter
      */
     public function updateProfile(Request $request)
     {
-        /** 
+        /**
          * get input data except email, password, and roles
-         * changing email, password and roles should be in another endpoint 
+         * changing email, password and roles should be in another endpoint
          * */
         $input = $request->except(['email', 'password', 'roles']);
 
@@ -157,7 +154,7 @@ class UserController extends Controller
 
     /**
      * Function used to handle updatephoto endpoint
-     * 
+     *
      * @param Illuminate\Http\Request $request
      * @return App\Helpers\ResponseFormatter
      */
