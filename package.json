@@ -2,7 +2,7 @@
     "private": true,
     "scripts": {
         "dev": "npm run development",
-        "ncu": "ncu -u && npm install",
+        "ncu": "ncu -u && npm install && npm run dev",
         "development": "mix",
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
@@ -18,7 +18,7 @@
         "axios": "^0.21",
         "laravel-mix": "^6.0.13",
         "lodash": "^4.17.21",
-        "npm-check-updates": "^11.2.1",
+        "npm-check-updates": "^11.2.2",
         "postcss": "^8.2.8",
         "postcss-import": "^14.0.0",
         "tailwindcss": "^2.0.3"
