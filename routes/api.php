@@ -43,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('transaction', [Transaction::class, 'all']);
     Route::post('transaction/{id}', [Transaction::class, 'update']);
+
+    Route::post('checkout', [Transaction::class, 'checkout']);
 });
 
 Route::get('food', [FoodController::class, 'all']);
