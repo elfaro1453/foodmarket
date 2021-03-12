@@ -91,7 +91,13 @@ class TransactionController extends Controller
         );
     }
 
-    public function checkOut(Request $request)
+    /**
+     * Checkout controller to 
+     * @param Request $request
+     * 
+     * @return JsonResponse
+     */
+    public function checkout(Request $request) : JsonResponse
     {
         // validate request
         $validator = Validator::make(

@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\API\FoodController;
+use App\Http\Controllers\API\MidtransController;
+use App\Http\Controllers\API\TransactionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
-use App\Models\Transaction;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +41,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('user/photo', [UserController::class, 'updatePhoto']);
     Route::post('logout', [UserController::class, 'logout']);
 
-    Route::get('transaction', [Transaction::class, 'all']);
-    Route::post('transaction/{id}', [Transaction::class, 'update']);
+    Route::get('transaction', [TransactionController::class, 'all']);
+    Route::post('transaction/{id}', [TransactionController::class, 'update']);
 
-    Route::post('checkout', [Transaction::class, 'checkout']);
+    Route::post('checkout', [TransactionController::class, 'checkout']);
 });
 
 Route::get('food', [FoodController::class, 'all']);
+Route::post('midtrans/callback', [MidtransController::class, 'callback']);
