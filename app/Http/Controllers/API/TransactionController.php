@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,9 @@ class TransactionController extends Controller
      *
      * @param Request $request
      *
-     * @return App\Helpers\ResponseFormatter
+     * @return JsonResponse
      */
-    public function all(Request $request)
+    public function all(Request $request) : JsonResponse
     {
         $id = $request->input('id');
         $limit = $request->input('limit', 6);
@@ -66,9 +67,9 @@ class TransactionController extends Controller
      * @param Request $request
      * @param integer $id
      *
-     * @return App\Helpers\ResponseFormatter
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) : JsonResponse
     {
         /**
          * @see https://laravel.com/docs/8.x/eloquent#not-found-exceptions

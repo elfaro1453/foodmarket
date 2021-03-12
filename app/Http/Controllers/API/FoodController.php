@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Helpers\ResponseFormatter;
+use Illuminate\Http\JsonResponse;
 use App\Models\Food;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,9 +16,9 @@ class FoodController extends Controller
      *
      * @param Request $request
      *
-     * @return App\Helpers\ResponseFormatter
+     * @return JsonResponse
      */
-    public function all(Request $request)
+    public function all(Request $request) : JsonResponse
     {
         $id = $request->input('id');
 

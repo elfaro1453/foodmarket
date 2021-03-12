@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +20,9 @@ class UserController extends Controller
      * Function used to handle login endpoint
      *
      * @param Illuminate\Http\Request $request
-     * @return App\Helpers\ResponseFormatter
+     * @return JsonResponse
      */
-    public function login(Request $request)
+    public function login(Request $request) : JsonResponse
     {
         /**
          * Get a portion of the request
@@ -65,9 +66,9 @@ class UserController extends Controller
      * Function used to handle register endpoint
      *
      * @param Illuminate\Http\Request $request
-     * @return App\Helpers\ResponseFormatter
+     * @return JsonResponse
      */
-    public function register(Request $request)
+    public function register(Request $request) : JsonResponse
     {
         $validator = Validator::make(
             $request->all(),
@@ -123,9 +124,9 @@ class UserController extends Controller
      * Function used to handle logout endpoint
      *
      * @param Illuminate\Http\Request $request
-     * @return App\Helpers\ResponseFormatter
+     * @return JsonResponse
      */
-    public function logout(Request $request)
+    public function logout(Request $request) : JsonResponse
     {
         /**
          * @see https://laravel.com/docs/8.x/sanctum#revoking-tokens
@@ -138,9 +139,9 @@ class UserController extends Controller
      * Function used to handle fetch current user endpoint
      *
      * @param Illuminate\Http\Request $request
-     * @return App\Helpers\ResponseFormatter
+     * @return JsonResponse
      */
-    public function fetch(Request $request)
+    public function fetch(Request $request) : JsonResponse
     {
         return ResponseFormatter::success($request->user(), 'Data Current User has been fetched.');
     }
@@ -149,9 +150,9 @@ class UserController extends Controller
      * Function used to handle updateprofile endpoint
      *
      * @param Illuminate\Http\Request $request
-     * @return App\Helpers\ResponseFormatter
+     * @return JsonResponse
      */
-    public function updateProfile(Request $request)
+    public function updateProfile(Request $request) : JsonResponse
     {
         /**
          * get input data except email, password, and roles
@@ -171,9 +172,9 @@ class UserController extends Controller
      * Function used to handle updatephoto endpoint
      *
      * @param Illuminate\Http\Request $request
-     * @return App\Helpers\ResponseFormatter
+     * @return JsonResponse
      */
-    public function updatePhoto(Request $request)
+    public function updatePhoto(Request $request) : JsonResponse
     {
         // validate the request
         $validator = Validator::make(

@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Http\JsonResponse;
+
 /**
  * Helpers to format response.
  *
@@ -28,9 +30,9 @@ class ResponseFormatter
    *
    * @param mixed $data
    * @param string $message
-   * @return json
+   * @return JsonResponse
    */
-    public static function success($data = null, $message = null)
+    public static function success($data = null, $message = null) : JsonResponse
     {
         self::$response['meta']['message'] = $message;
         self::$response['data'] = $data;
@@ -44,9 +46,9 @@ class ResponseFormatter
    * @param mixed $data
    * @param string $message
    * @param integer $code
-   * @return json
+   * @return JsonResponse
    */
-    public static function error($data = null, $message = null, $code = 400)
+    public static function error($data = null, $message = null, $code = 400) : JsonResponse
     {
         self::$response['meta']['status'] = 'error';
         self::$response['meta']['code'] = $code;
