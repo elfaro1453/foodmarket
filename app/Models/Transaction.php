@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Transaction extends Model
 {
@@ -39,9 +40,9 @@ class Transaction extends Model
      *
      * @see https://laravel.com/docs/8.x/eloquent-relationships#one-to-one
      *
-     * return App\Model\Food
+     * @return HasOne
      */
-    public function food()
+    public function food() : HasOne
     {
         return $this->hasOne(Food::class, 'id', 'food_id');
     }
@@ -52,9 +53,9 @@ class Transaction extends Model
      *
      * @see https://laravel.com/docs/8.x/eloquent-relationships#one-to-one
      *
-     * return App\Model\User
+     * @return HasOne
      */
-    public function user()
+    public function user() : HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }

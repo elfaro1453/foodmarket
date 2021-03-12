@@ -73,10 +73,10 @@ class User extends Authenticatable
      * The accessors to get full URL of profile_photo_path
      *
      * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
-     * @param  $value profile_photo_path column
+     * 
      * @return string baseUrl + profile_photo_path
      */
-    public function getProfilePhotoPathAttribute($value)
+    public function getProfilePhotoPathAttribute() : string
     {
         return url('') . Storage::url($this->attributes['profile_photo_path']);
     }

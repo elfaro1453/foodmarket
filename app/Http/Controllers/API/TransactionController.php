@@ -89,5 +89,6 @@ class TransactionController extends Controller
 
     public function checkOut(Request $request)
     {
+        
     }
 }
