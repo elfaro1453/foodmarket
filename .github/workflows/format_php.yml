@@ -1,4 +1,4 @@
-name: GrumPHP
+name: Code Quality Check
 
 on: [push, pull_request]
 jobs:
@@ -6,10 +6,10 @@ jobs:
         runs-on: ${{ matrix.operating-system }}
         strategy:
             matrix:
-                operating-system: [ubuntu-latest] #windows-latest currently not working
+                operating-system: [ubuntu-latest, macos-latest] #windows-latest currently not working
                 php-versions: ['8.0']
-                composer-options: ['', '--prefer-lowest']
-                composer-versions: ['composer:v1', 'composer:v2']
+                composer-options: ['']
+                composer-versions: ['composer:v2']
             fail-fast: false
         name: PHP ${{ matrix.php-versions }} @ ${{ matrix.operating-system }} with ${{ matrix.composer-versions }} ${{ matrix.composer-options }}
         steps:
