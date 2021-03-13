@@ -52,9 +52,9 @@ jobs:
             - name: Run Grumphp
               if: runner.os != 'Windows'
               run: php vendor/bin/grumphp run --no-interaction
-            - name: Run PHPUnit
-              if: runner.os != 'Windows'
-              run: php vendor/bin/phpunit --verbose
             - name: Run Eslint fix
               if: runner.os != 'Windows'
               run: node_modules\.bin\eslint --fix resources/
+            - name: Laravel PHPUnit
+            uses: nathanheffley/laravel-phpunit-action@v0.1.0
+
