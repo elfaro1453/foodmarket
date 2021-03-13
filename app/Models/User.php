@@ -21,7 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $two_factor_recovery_codes
  * @property string|null $remember_token
  * @property int|null $current_team_id
- * @property string $profile_photo_path
+ * @property string $profile_photo_url
  * @property string|null $address
  * @property string|null $house_number
  * @property string|null $phone_number
@@ -110,18 +110,22 @@ class User extends Authenticatable
      * @var array
      */
     protected $appends = [
-        'profile_photo_path',
+        'profile_photo_url',
     ];
 
     /**
-     * The accessors to get full URL of profile_photo_path.
+     * The accessors to get full URL of profile_photo_url.
      *
      * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
      *
-     * @return ?string baseUrl + profile_photo_path
+     * @return string baseUrl + profile_photo_url
      */
-    public function getProfilePhotoPathAttribute(): ?string
+    public function getProfilePhotoUrlAttribute(): string
     {
-        return $this->attributes['profile_photo_path'];
+        if (isset($this->attributes['profile_photo_url'])) {
+            return $this->attributes['profile_photo_url'];
+        }
+
+        return '';
     }
 }
