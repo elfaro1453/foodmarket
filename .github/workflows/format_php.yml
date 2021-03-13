@@ -56,5 +56,7 @@ jobs:
               if: runner.os != 'Windows'
               run: node_modules\.bin\eslint --fix resources/
             - name: Laravel PHPUnit
-            uses: nathanheffley/laravel-phpunit-action@v0.1.0
-
+              run: |
+                cp .env.example .env
+                php artisan key:generate
+                php vendor/bin/phpunit
