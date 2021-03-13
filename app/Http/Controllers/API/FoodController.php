@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\API;
 
 use App\Helpers\ResponseFormatter;
-use Illuminate\Http\JsonResponse;
-use App\Models\Food;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Food;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class FoodController extends Controller
 {
-
     /**
-     * Get all foods in paginated json format
+     * Get all foods in paginated json format.
      *
      * @param Request $request
      *
@@ -50,27 +49,27 @@ class FoodController extends Controller
 
         $query = Food::query();
         if ($name) {
-            $query->where('name', 'like', '%' . $name . '%');
+            $query->where('name', 'like', '%'.$name.'%');
         }
 
         if ($types) {
-            $query->where('name', 'like', '%' . $types . '%');
+            $query->where('name', 'like', '%'.$types.'%');
         }
 
         if ($price_from) {
-            $query->where('name', 'like', '%' . $price_from . '%');
+            $query->where('name', 'like', '%'.$price_from.'%');
         }
 
         if ($price_to) {
-            $query->where('name', 'like', '%' . $price_to . '%');
+            $query->where('name', 'like', '%'.$price_to.'%');
         }
 
         if ($rate_from) {
-            $query->where('name', 'like', '%' . $rate_from . '%');
+            $query->where('name', 'like', '%'.$rate_from.'%');
         }
 
         if ($rate_to) {
-            $query->where('name', 'like', '%' . $rate_to . '%');
+            $query->where('name', 'like', '%'.$rate_to.'%');
         }
 
         $queryResult = $query->simplePaginate($limit);

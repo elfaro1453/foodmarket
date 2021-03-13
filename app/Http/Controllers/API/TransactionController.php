@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\API;
 
-use Midtrans\Config;
-use App\Models\Transaction;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use App\Models\Transaction;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Midtrans\Config;
 use Midtrans\Snap;
 
 class TransactionController extends Controller
 {
     /**
-     * Get all transactions in paginated json format
+     * Get all transactions in paginated json format.
      *
      * @param Request $request
      *
@@ -60,6 +60,7 @@ class TransactionController extends Controller
         }
 
         $queryResult = $query->simplePaginate($limit);
+
         return ResponseFormatter::success(
             $queryResult,
             'Data transaksi berhasil diambil'
@@ -68,7 +69,7 @@ class TransactionController extends Controller
 
     /**
      * @param Request $request
-     * @param integer $id
+     * @param int $id
      *
      * @return JsonResponse
      */
@@ -92,15 +93,16 @@ class TransactionController extends Controller
     }
 
     /**
-     * Checkout controller to 
+     * Checkout controller to.
      * @param Request $request
-     * 
+     *
      * @return JsonResponse
      */
     public function checkout(Request $request) : JsonResponse
     {
         // validate request
         $validator = Validator::make(
+            $request->all(),
             [
                 'food_id' => 'required|exists:App\Models\Food,id',
                 // 'user_id' => 'required|exists:App\Models\User,id',
@@ -119,7 +121,7 @@ class TransactionController extends Controller
             return ResponseFormatter::error(
                 [
                 'message' => 'Invalid Input',
-                'error' => $errors
+                'error' => $errors,
                 ],
                 'Invalid input',
                 400
@@ -145,7 +147,7 @@ class TransactionController extends Controller
         Config::$is3ds = config('services.midtrans.is3ds');
 
         /**
-         * Build Midtrans Request Body
+         * Build Midtrans Request Body.
          * @see https://snap-docs.midtrans.com/#request-body-json-parameter
          */
         $midtrans = [
@@ -158,9 +160,9 @@ class TransactionController extends Controller
                 'email' => $user->email,
             ],
             'enabled_payments' => [
-                'bank_transfer', 'indomaret', 'gopay'
+                'bank_transfer', 'indomaret', 'gopay',
             ],
-            'vtweb' => []
+            'vtweb' => [],
         ];
 
         try {
@@ -182,6 +184,6 @@ class TransactionController extends Controller
                 'Transaksi Error',
                 500
             );
-        };
+        }
     }
 }

@@ -4,8 +4,8 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\API\FoodController;
 use App\Http\Controllers\API\MidtransController;
 use App\Http\Controllers\API\TransactionController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ Route::post('login', [UserController::class, 'login']);
 Route::get('unauthorized', function () {
     // return unauthorized message
     return ResponseFormatter::error([
-        'message' => 'Unauthorized'
+        'message' => 'Unauthorized',
     ], 'Unauthorized', 401);
 })->name('api.unauthorized');
 

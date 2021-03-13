@@ -40,11 +40,10 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Adding Sentry Reporting Function
+     * Adding Sentry Reporting Function.
      *
      * @return void
      */
-
     public function report(Throwable $exception)
     {
         if (app()->bound('sentry') && $this->shouldReport($exception)) {

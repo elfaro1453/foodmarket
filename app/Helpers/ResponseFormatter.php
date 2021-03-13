@@ -11,11 +11,11 @@ use Illuminate\Http\JsonResponse;
  */
 class ResponseFormatter
 {
-  /**
-   * API Response
-   *
-   * @var array
-   */
+    /**
+     * API Response.
+     *
+     * @var array
+     */
     protected static $response = [
     'meta' => [
       'code' => 200,
@@ -25,13 +25,13 @@ class ResponseFormatter
     'data' => null,
     ];
 
-  /**
-   * Give success response.
-   *
-   * @param mixed $data
-   * @param string $message
-   * @return JsonResponse
-   */
+    /**
+     * Give success response.
+     *
+     * @param mixed $data
+     * @param string $message
+     * @return JsonResponse
+     */
     public static function success($data = null, $message = null) : JsonResponse
     {
         self::$response['meta']['message'] = $message;
@@ -40,14 +40,14 @@ class ResponseFormatter
         return response()->json(self::$response, self::$response['meta']['code']);
     }
 
-  /**
-   * Give error response.
-   *
-   * @param mixed $data
-   * @param string $message
-   * @param integer $code
-   * @return JsonResponse
-   */
+    /**
+     * Give error response.
+     *
+     * @param mixed $data
+     * @param string $message
+     * @param int $code
+     * @return JsonResponse
+     */
     public static function error($data = null, $message = null, $code = 400) : JsonResponse
     {
         self::$response['meta']['status'] = 'error';

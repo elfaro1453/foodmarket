@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\API;
 
-use Midtrans\Config;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use Illuminate\Http\Request;
+use Midtrans\Config;
 use Midtrans\Notification;
 
 class MidtransController extends Controller
 {
-    
     /**
-     * Controller for Midtrans callback, Midtrans will send notification via POST
-     * 
+     * Controller for Midtrans callback, Midtrans will send notification via POST.
+     *
      * @param Request $request
-     * 
+     *
      * @return void
      */
     public function callback(Request $request)
@@ -26,21 +25,19 @@ class MidtransController extends Controller
         Config::$isSanitized = config('services.midtrans.isSanitized');
         Config::$is3ds = config('services.midtrans.is3ds');
 
-        /** 
-         * handle midtrans notification
+        /**
+         * handle midtrans notification.
          * @see https://github.com/Midtrans/midtrans-php#23-handle-http-notification
          * */
         $midtransNotif = new Notification();
 
         $transactionStatus = $midtransNotif->transaction_status;
-        $fraudStatus = $midtransNotif->fraud_status;
         $orderId = $midtransNotif->order_id;
-        $paymentType = $midtransNotif->payment_type;
 
         // find the transaction order
         $order = Transaction::findOrFail($orderId);
 
-        /**
+        /*
          * We don't accept Credit card and refund
          * more information about transaction status
          * @see https://api-docs.midtrans.com/#transaction-status
