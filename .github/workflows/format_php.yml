@@ -27,13 +27,11 @@ jobs:
                 php -v
                 php -m
                 composer --version
-            - name: Install Node.js ${{ matrix.node-version }}
-              shell: bash -l {0}
-              run: |
-                nvm install --default ${{ matrix.node-version }}
-                dirname "$(npm which)" >> "$GITHUB_PATH"
-            - name: Install Node.js dependencies
-              run: npm install
+            - name: Setup Node.js environment
+              uses: actions/setup-node@v2.1.5
+              with:
+                node-version: '15'
+            - run: npm install
             - name: Get composer cache directory
               id: composercache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
