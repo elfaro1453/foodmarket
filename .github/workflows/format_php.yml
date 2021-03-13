@@ -30,7 +30,7 @@ jobs:
             - name: Setup Node.js environment
               uses: actions/setup-node@v2.1.5
               with:
-                node-version: '15'
+                node-version: ${{ matrix.node-version }}
             - run: npm install
             - name: Get composer cache directory
               id: composercache
@@ -48,11 +48,8 @@ jobs:
                 git config --global user.email "you@example.com"
                 git config --global user.name "Your Name"
             - name: Run Grumphp
-              if: runner.os != 'Windows'
               run: php vendor/bin/grumphp run --no-interaction
-            - name: Run Eslint fix
-              if: runner.os != 'Windows'
-              run: eslint --fix resources/
+            - run: npm run eslint
             - name: Laravel PHPUnit
               run: |
                 cp .env.example .env
