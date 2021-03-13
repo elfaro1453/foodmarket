@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
@@ -119,14 +118,10 @@ class User extends Authenticatable
      *
      * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
      *
-     * @return string baseUrl + profile_photo_path
+     * @return ?string baseUrl + profile_photo_path
      */
-    public function getProfilePhotoPathAttribute(): string
+    public function getProfilePhotoPathAttribute(): ?string
     {
-        if (isset($this->attributes['profile_photo_path'])) {
-            return url('').Storage::url($this->attributes['profile_photo_path']);
-        }
-
-        return '';
+        return $this->attributes['profile_photo_path'];
     }
 }

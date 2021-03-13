@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravolt\Avatar\Avatar;
@@ -97,12 +98,6 @@ class UserController extends Controller
             );
         }
 
-        // if file image doesn't included as profile_photo_path
-        if (! isset($request->profile_photo_path)) {
-            $avatar = new Avatar();
-            $avatar->create($request->name)->save('path/to/file.png', 100);
-        }
-
         // if validation success, create user
         $user = new User();
         $user->name = $request->name;
@@ -113,6 +108,18 @@ class UserController extends Controller
         $user->phone_number = $request->phone_number;
         $user->city = $request->city;
 
+        $assetPath = 'assets/user';
+        // if file image doesn't included as profile_photo_path
+        if (! isset($request->profile_photo_path)) {
+            $config = Config::get('laravolt.avatar');
+            $avatar = new Avatar($config);
+            $user->profile_photo_path = $avatar->create($request->name)->toBase64();
+        } else {
+            $user->profile_photo_path = url('').$request->profile_photo_path->store(
+                $assetPath,
+                'public'
+            );
+        }
         $user->save();
 
         // create token for newly user
@@ -201,12 +208,12 @@ class UserController extends Controller
             );
         }
         $file = $request->file->store(
-                'assets/user',
-                'public'
-            );
+            'assets/user',
+            'public'
+        );
 
         $user = $request->user();
-        $user->profile_photo_path = $file;
+        $user->profile_photo_path = url('').$file;
         $user->save();
 
         return ResponseFormatter::success([$file], 'Foto profil berhasil diupdate.');
