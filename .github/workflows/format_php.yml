@@ -54,7 +54,7 @@ jobs:
               run: php vendor/bin/grumphp run --no-interaction
             - name: Run Eslint fix
               if: runner.os != 'Windows'
-              run: node_modules\.bin\eslint --fix resources/
+              run: eslint --fix resources/
             - name: Laravel PHPUnit
               run: |
                 cp .env.example .env
