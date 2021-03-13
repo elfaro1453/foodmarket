@@ -9,7 +9,6 @@
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  */
 
-
 namespace App\Models{
 /**
  * App\Models\Food.
@@ -216,4 +215,3 @@ namespace App\Models{
  */
 	class User extends \Eloquent {}
 }
-

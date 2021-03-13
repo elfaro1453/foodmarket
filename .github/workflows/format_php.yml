@@ -10,6 +10,7 @@ jobs:
                 php-versions: ['8.0']
                 composer-options: ['']
                 composer-versions: ['composer:v2']
+                node-version: ['15']
             fail-fast: false
         name: PHP ${{ matrix.php-versions }} @ ${{ matrix.operating-system }} with ${{ matrix.composer-versions }} ${{ matrix.composer-options }}
         steps:
@@ -26,6 +27,13 @@ jobs:
                 php -v
                 php -m
                 composer --version
+            - name: Install Node.js ${{ matrix.node-version }}
+              shell: bash -l {0}
+              run: |
+                nvm install --default ${{ matrix.node-version }}
+                dirname "$(npm which)" >> "$GITHUB_PATH"
+            - name: Install Node.js dependencies
+              run: npm install
             - name: Get composer cache directory
               id: composercache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
@@ -35,15 +43,18 @@ jobs:
                   path: ${{ steps.composercache.outputs.dir }}
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
                   restore-keys: ${{ runner.os }}-composer-
-            - name: Install dependencies
+            - name: Install composer dependencies
               run: composer update --prefer-dist --no-progress --no-suggest ${{ matrix.composer-options }}
             - name: Set git variables
               run: |
                 git config --global user.email "you@example.com"
                 git config --global user.name "Your Name"
-            - name: Run the tests on Windows
-              if: runner.os == 'Windows'
-              run: php vendor/bin/grumphp run --no-interaction --testsuite=windows
-            - name: Run the tests on unix
+            - name: Run Grumphp
               if: runner.os != 'Windows'
               run: php vendor/bin/grumphp run --no-interaction
+            - name: Run PHPUnit
+              if: runner.os != 'Windows'
+              run: php vendor/bin/phpunit --verbose
+            - name: Run Eslint fix
+              if: runner.os != 'Windows'
+              run: node_modules\.bin\eslint --fix resources/

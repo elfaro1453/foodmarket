@@ -121,8 +121,12 @@ class User extends Authenticatable
      *
      * @return string baseUrl + profile_photo_path
      */
-    public function getProfilePhotoPathAttribute() : string
+    public function getProfilePhotoPathAttribute(): string
     {
-        return url('').Storage::url($this->attributes['profile_photo_path']);
+        if (isset($this->attributes['profile_photo_path'])) {
+            return url('').Storage::url($this->attributes['profile_photo_path']);
+        }
+
+        return '';
     }
 }
