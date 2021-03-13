@@ -6,6 +6,7 @@ parameters:
     paths:
         - app
         - routes
+        - config
         - resources
     ignoreErrors:
         - '#Access to an undefined property *#'
