@@ -91,7 +91,7 @@ class Food extends Model
      * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
      * @return string baseUrl + picture_path
      */
-    public function getFoodPictureUrlAttribute() : ?string
+    public function getFoodPictureUrlAttribute(): ?string
     {
         if (isset($this->attributes['picture_path'])) {
             return Storage::disk('public')->url($this->attributes['picture_path']);

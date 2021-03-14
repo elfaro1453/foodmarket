@@ -9,6 +9,7 @@
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  */
 
+
 namespace App\Models{
 /**
  * App\Models\Food.
@@ -42,6 +43,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Food withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Food withoutTrashed()
  * @mixin \Eloquent
+ * @property-read string $food_picture_url
  */
 	class Food extends \Eloquent {}
 }
@@ -174,7 +176,7 @@ namespace App\Models{
  * @property string|null $two_factor_recovery_codes
  * @property string|null $remember_token
  * @property int|null $current_team_id
- * @property string $profile_photo_path
+ * @property string $profile_photo_url
  * @property string|null $address
  * @property string|null $house_number
  * @property string|null $phone_number
@@ -212,6 +214,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTwoFactorRecoveryCodes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @property string|null $profile_photo_path
  */
 	class User extends \Eloquent {}
 }
+

@@ -75,7 +75,7 @@ class Transaction extends Model
      *
      * @return HasOne
      */
-    public function food() : HasOne
+    public function food(): HasOne
     {
         return $this->hasOne(Food::class, 'id', 'food_id');
     }
@@ -88,7 +88,7 @@ class Transaction extends Model
      *
      * @return HasOne
      */
-    public function user() : HasOne
+    public function user(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
