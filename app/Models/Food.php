@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\Food.
@@ -54,6 +54,14 @@ class Food extends Model
         'name', 'description',
         'ingredients', 'price',
         'rate', 'types',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
         'picture_path',
     ];
 
@@ -69,13 +77,25 @@ class Food extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'food_picture_url'
+    ];
+
+    /**
      * The accessors to get full URL of picture_path.
      *
      * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
      * @return string baseUrl + picture_path
      */
-    public function getPicturePathAttribute() : string
+    public function getFoodPictureUrlAttribute() : ?string
     {
-        return url('').Storage::url($this->attributes['picture_path']);
+        if (isset($this->attributes['picture_path'])) {
+            return Storage::disk('public')->url($this->attributes['picture_path']);
+        }
+        return null;
     }
 }

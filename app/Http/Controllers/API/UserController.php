@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Actions\Fortify\PasswordValidationRules;
-use App\Helpers\ResponseFormatter;
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Laravolt\Avatar\Avatar;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Helpers\ResponseFormatter;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use App\Actions\Fortify\PasswordValidationRules;
 
 class UserController extends Controller
 {
     use PasswordValidationRules;
 
+    private $assetPath = 'assets/user';
     /**
      * Function used to handle login endpoint.
      *
@@ -78,7 +81,7 @@ class UserController extends Controller
             'email' => 'email|max:255|unique:App\Models\User,email|required',
             'name' => 'string|max:255|required',
             'password' => $this->passwordRules(),
-            'profile_photo_path' => 'nullable|image|max:2048',
+            'photo' => 'nullable|image|max:2048',
             ]
         );
 
@@ -108,17 +111,12 @@ class UserController extends Controller
         $user->phone_number = $request->phone_number;
         $user->city = $request->city;
 
-        $assetPath = 'assets/user';
-        // if file image doesn't included as profile_photo_path
-        if (! isset($request->profile_photo_path)) {
-            $config = Config::get('laravolt.avatar');
-            $avatar = new Avatar($config);
-            $user->profile_photo_path = $avatar->create($request->name)->toBase64();
-        } else {
-            $user->profile_photo_path = url('').$request->profile_photo_path->store(
-                $assetPath,
+        if (isset($request->photo)) {
+            $file = $request->photo->store(
+                $this->assetPath,
                 'public'
             );
+            $user->profile_photo_path = $file;
         }
         $user->save();
 
@@ -160,7 +158,7 @@ class UserController extends Controller
      */
     public function fetch(Request $request) : JsonResponse
     {
-        return ResponseFormatter::success($request->user(), 'Data Current User has been fetched.');
+        return ResponseFormatter::success($request->user(), 'Data user saat ini berhasil diambil.');
     }
 
     /**
@@ -177,10 +175,11 @@ class UserController extends Controller
          * */
         $input = $request->except(['email', 'password', 'roles']);
 
-        // update user
-        User::where('email', $request->user()->email)->update($input);
-
+        // get current user
         $user = Auth::user();
+
+        // update user
+        $user->update($input);
 
         return ResponseFormatter::success($user, 'Profile berhasil diperbarui !');
     }
@@ -196,7 +195,7 @@ class UserController extends Controller
         // validate the request
         $validator = Validator::make(
             $request->all(),
-            ['file' => 'required|image|max:2048']
+            ['photo' => 'required|image|max:2048']
         );
 
         // if validation fails, throw error to client
@@ -207,15 +206,24 @@ class UserController extends Controller
                 400
             );
         }
-        $file = $request->file->store(
-            'assets/user',
+
+        // Get Current User
+        $user = Auth::user();
+
+        $isCurrentPhotoExist = Storage::disk('public')->exists($user->profile_photo_path);
+        if ($isCurrentPhotoExist) {
+            Storage::disk('public')->delete($user->profile_photo_path);
+        }
+
+        $file = $request->photo->store(
+            $this->assetPath,
             'public'
         );
 
         $user = $request->user();
-        $user->profile_photo_path = url('').$file;
+        $user->profile_photo_path = $file;
         $user->save();
 
-        return ResponseFormatter::success([$file], 'Foto profil berhasil diupdate.');
+        return ResponseFormatter::success($user, 'Foto profil berhasil diupdate.');
     }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Jetstream\HasProfilePhoto;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Post.
@@ -87,6 +88,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
+        'profile_photo_path',
         'password',
         'remember_token',
         'two_factor_recovery_codes',
@@ -112,20 +114,4 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-
-    /**
-     * The accessors to get full URL of profile_photo_url.
-     *
-     * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
-     *
-     * @return string baseUrl + profile_photo_url
-     */
-    public function getProfilePhotoUrlAttribute(): string
-    {
-        if (isset($this->attributes['profile_photo_url'])) {
-            return $this->attributes['profile_photo_url'];
-        }
-
-        return '';
-    }
 }
