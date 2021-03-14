@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Laravolt\Avatar\Avatar;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use App\Actions\Fortify\PasswordValidationRules;
 use App\Helpers\ResponseFormatter;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use App\Actions\Fortify\PasswordValidationRules;
 
 class UserController extends Controller
 {
     use PasswordValidationRules;
 
     private $assetPath = 'assets/user';
+
     /**
      * Function used to handle login endpoint.
      *

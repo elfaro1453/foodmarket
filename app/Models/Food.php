@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\Food.
@@ -82,7 +82,7 @@ class Food extends Model
      * @var array
      */
     protected $appends = [
-        'food_picture_url'
+        'food_picture_url',
     ];
 
     /**
@@ -96,6 +96,7 @@ class Food extends Model
         if (isset($this->attributes['picture_path'])) {
             return Storage::disk('public')->url($this->attributes['picture_path']);
         }
+
         return null;
     }
 }
